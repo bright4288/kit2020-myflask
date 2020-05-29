@@ -37,18 +37,20 @@ def getinfo():
 @app.route('/input/<int:num>')
 def input_num(num):
     if num == 1:
-        with open("static/game.txt", "r", encoding='utf-8') as f:
-            data = f.read()
-            character = json.loads(data)
-            print(character['house'])
-        return "{} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
+        #with open("static/game.txt", "r", encoding='utf-8') as f:
+            #data = f.read()
+            #character = json.loads(data)
+            #print(character['house'])
+        return "로딩중 , 이상한 세계 1에 오신 것을 환영합니다."
+        #  "{} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
     elif num == 2:
-        return "집 짓기 실패"
+        return "로딩 실패, 처음으로 돌아가세요"
     elif num ==3:
         return "퉁퉁이"
     else:
         return "없어요"
     #return 'Hello, {}!'.format(name)
+
 
 @app.route('/naver')
 def never():
