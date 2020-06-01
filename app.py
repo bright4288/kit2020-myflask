@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, abort, session
+from flask import Flask, request, render_template, redirect, url_for, abort
 
 app = Flask(__name__)
 
@@ -6,7 +6,6 @@ app = Flask(__name__)
 import game
 import json
 
-import dbdb
 
 @app.route('/')
 def index():
@@ -33,12 +32,11 @@ def gamestart():
 @app.route('/input/<int:num>')
 def input_num(num):
     if num == 1:
-        #with open("static/game.txt", "r", encoding='utf-8') as f:
-            #data = f.read()
-            #character = json.loads(data)
-            #print(character['house'])
-        return "로딩중 , 이상한 세계 1에 오신 것을 환영합니다."
-        #  "{} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
+        with open("static/game.txt", "r", encoding='utf-8') as f:
+            data = f.read()
+            character = json.loads(data)
+            print(character['house'])
+        return "로딩중 , 이상한 세계 1에 오신 것을 환영합니다. {} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
     elif num == 2:
         return "로딩 실패, 처음으로 돌아가세요"
     elif num ==3:
@@ -47,29 +45,41 @@ def input_num(num):
         return "없어요"
     #return 'Hello, {}!'.format(name)
 
-app.secreat_key = b'aaa!111/'
+#로그인
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        id =request.form['id']
+        id =request.form['pw']
+        print (id,type(id))
+        print (pw,type(pw))
+        #id와 pw가 임의로 정한 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
+        if id == 'abc' and pw =='1234' :
+            return "안녕하세요~ {} 님". format(id)
+        else:
+            return "아이디 또는 패스워드를 확인 하세요"
 
-
-
-# # 로그아웃(session 제거)
-# @app.route('/logout')
-# def logout():
-#     session.pop('user', None)
-#     return redirect(url_for('form'))
-
-# # 로그인 사용자만 접근 가능으로 만들면
-# @app.route('/form')
-# def form():
-#     if 'user' in session:
-#         return render_template('test.html')
-#     return redirect(url_for('login'))
+@app.route('/method', methods=['GET', 'POST'])
+def method():
+    if request.method == 'GET':
+        return "GET으로 전송이다."
+    else:
+        num = request.form["num"]
+        name = request.form["name"]
+        print(num,name)
+        with open("static/game.txt","w", encoding='utf-8') as f:
+            f.write("%s,%s" % (num, name))
+        return "POST 이다. 학번은 :{} 이름은: {}".format(num, name)
 
 @app.route('/getinfo')
 def getinfo():
-    ret =  dbdb.select_all()
-    print(ret[3])
-    return render_template("getinfo.html", data=ret)
-    # return'번호 : {}, 이름 : {}'.format(ret[0], ret[1])
+    #파일 입력
+    with open("static/game.txt", "r", encoding='utf-8') as file:
+        student = file.read().split(',')#쉼표로 잘라서 student 에 배열로 저장
+    return '번호 :{}, 이름 :{}'.format(student[0], student[1])
+
 
 @app.route('/naver')
 def never():
@@ -103,6 +113,6 @@ def img():
 
 
 if __name__ == '__main__':
-    with app.test_request_context():
+    with app.test_request_context():
         print(url_for('daum'))
-	app.debug = True
+    app.run(debug=True)
