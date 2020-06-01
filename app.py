@@ -5,6 +5,8 @@ app = Flask(__name__)
 import game
 import json
 
+import dbdb
+
 @app.route('/')
 def index():
     return '메인페이지'
@@ -27,13 +29,6 @@ def gamestart():
     return "{} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
 
 
-@app.route('/getinfo')
-def getinfo():
-    #파일 입력
-    with open("static/game.txt","r",encoding='utf-8') as file:
-        student = file.read().split(',')
-    return'번호 : {}, 이름 : {}'.format(student[0], student[1])
-
 @app.route('/input/<int:num>')
 def input_num(num):
     if num == 1:
@@ -50,38 +45,6 @@ def input_num(num):
     else:
         return "없어요"
     #return 'Hello, {}!'.format(name)
-
-
-@app.route('/naver')
-def never():
-    return redirect("https://www.naver.com/")
-    #return render_template("naver.html")
-
-@app.route('/kakao')
-def daum():
-    return redirect("https://www.daum.net/")
- 
-@app.route('/urltest')
-def url_test():
-    return redirect(url_for('naver'))
-
-@app.route('/move/<site>')
-def move_site(site):
-    if site == 'naver':
-        return redirect(url_for('naver'))
-    elif site == 'daum':
-        return redirect(url_for('daum'))
-    else:
-        abort(404)
-
-@app.errorhandler(404)
-def page_not_fount(error):
-    return "페이지가 없습니다. URL를 확인 하세요",404
-
-@app.route('/img')
-def img():
-    return render_template("image.html")
-    
 
 #로그인
 
@@ -115,6 +78,47 @@ def method():
         with open("static/game.txt","w",encoding='utf-8') as f:
             f.write("%s,%s" % (num, name))
         return'POST 이다. 학번은: {} 이름은: {}'.format(num,name)
+
+@app.route('/getinfo')
+def getinfo():
+    #파일 입력
+    with open("static/game.txt","r",encoding='utf-8') as file:
+        student = file.read().split(',')
+    return'번호 : {}, 이름 : {}'.format(student[0], student[1])
+
+@app.route('/naver')
+def never():
+    return redirect("https://www.naver.com/")
+    #return render_template("naver.html")
+
+@app.route('/kakao')
+def daum():
+    return redirect("https://www.daum.net/")
+ 
+@app.route('/urltest')
+def url_test():
+    return redirect(url_for('naver'))
+
+@app.route('/move/<site>')
+def move_site(site):
+    if site == 'naver':
+        return redirect(url_for('naver'))
+    elif site == 'daum':
+        return redirect(url_for('daum'))
+    else:
+        abort(404)
+
+@app.errorhandler(404)
+def page_not_fount(error):
+    return "페이지가 없습니다. URL를 확인 하세요",404
+
+@app.route('/img')
+def img():
+    return render_template("image.html")
+    
+
+
+
 
 
 if __name__ == '__main__':
