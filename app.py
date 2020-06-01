@@ -56,10 +56,14 @@ def login():
         print (id,type(id))
         print (pw,type(pw))
         #id와 pw가 임의로 정한 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
-        if id == 'abc' and pw =='1234' :
+        if id == 'abc' and  pw =='1234' :
             return "안녕하세요~ {} 님". format(id)
         else:
             return "아이디 또는 패스워드를 확인 하세요"
+
+@app.route('/form')
+def form():
+    return render_template('test.html')
 
 @app.route('/method', methods=['GET', 'POST'])
 def method():
