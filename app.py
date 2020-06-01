@@ -51,15 +51,15 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     else:
-        id =request.form['id']
-        id =request.form['pw']
-        print (id,type(id))
-        print (pw,type(pw))
+        id = request.form['id']
+        pw = request.form['pw']
+        print(id,type(id))
+        print(pw,type(pw))
         #id와 pw가 임의로 정한 값이랑 비교 해서 맞으면 맞다 틀리면 틀리다
-        if id == 'abc' and  pw =='1234' :
-            return "안녕하세요~ {} 님". format(id)
+        if id == 'abc' and pw == '1234':
+            return "안녕하세요 ~ {} 님".format(id)
         else:
-            return "아이디 또는 패스워드를 확인 하세요"
+            return "아이디 또는 패스워드를 확인 하세요."
 
 @app.route('/form')
 def form():
