@@ -15,11 +15,13 @@ def index():
 def hello():
     return 'Hello, World!'
 
+#순서 1
 @app.route('/hello/<name>')
 def hellovar(name):
     character = game.set_charact(name)
     return render_template('gamestart.html',data=character)
 
+#순서 2
 @app.route('/gamestart')
 def gamestart():
     with open("static/game.txt", "r", encoding='utf-8') as f:
@@ -28,7 +30,7 @@ def gamestart():
         print(character['house'])
     return "{} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
 
-
+#순서 3
 @app.route('/input/<int:num>')
 def input_num(num):
     if num == 1:
@@ -36,7 +38,7 @@ def input_num(num):
             data = f.read()
             character = json.loads(data)
             print(character['house'])
-        return "로딩중 , 이상한 세계 1에 오신 것을 환영합니다. {} 이 {} 을 골랐습니다.".format(character["name"],character["house"][0])
+        return "로딩중 , 이상한 세계 1에 오신 것을 환영합니다. {}이 {}을 지었습니다. 둘 중 선택하시오 1번 2번".format(character["name"],character["house"][0])
     elif num == 2:
         return "로딩 실패, 처음으로 돌아가세요"
     elif num ==3:
@@ -44,6 +46,56 @@ def input_num(num):
     else:
         return "없어요"
     #return 'Hello, {}!'.format(name)
+
+#순서 4
+@app.route('/home/<int:num>')
+def home(num):
+    if num == 1:
+        return "깨져 버림"
+    elif num == 2: 
+        return "안 깨짐 도구를 사용하시오. 1. 노동 2. 노동X"
+    else:
+        return "처음으로 돌아가시오"
+
+#순서 5
+@app.route('/노동/<int:num>')
+def work(num):
+    if num == 1:
+        with open("static/game.txt", "r", encoding='utf-8') as f:
+            data = f.read()
+            character = json.loads(data)
+            print(character['tools'])
+        return "노동도구인 {}을 선택하였습니다.".format(character["tools"][0])
+    elif num ==2:
+        with open("static/game.txt", "r", encoding='utf-8') as f:
+            data = f.read()
+            character = json.loads(data)
+            print(character['tools'])
+        return "노동 도구가 아닌 {}을 선택하였습니다.".format(character["tools"][2])
+    else:
+        return "처음으로 돌아가시오"
+#순서 6
+@app.route('/flower/<name>')
+def flower(name):
+    character = game.set_charact(name)
+    return render_template('flower.html',data=character)
+#순서 7
+@app.route('/flower/<int:num>')
+def input_flower(num):
+    if num == 1:
+        with open("static/game.txt", "r", encoding='utf-8') as f:
+            data = f.read()
+            character = json.loads(data)
+            print(character['kind'])
+        return "{}이 자랐습니다. 게임 성공".format(character["kind"][2])
+    elif num ==2:
+        with open("static/game.txt", "r", encoding='utf-8') as f:
+            data = f.read()
+            character = json.loads(data)
+            print(character['kind'])
+        return "{}이 자랐습니다. 게임 실패".format(character["kind"][1])
+    else:
+        return "아무것도 안심음"
 
 #로그인
 @app.route('/login', methods=['GET', 'POST'])
